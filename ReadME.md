@@ -8,7 +8,7 @@ The basic idea behind this framework is to show a large collection of building t
 ![OVENFigure](images/ovengraphicalabstract.png)
 Through back-propagation, we teach the network to find reliable estimates of the orientation and inclination of rooftops that can be used for solar panel installation.
 
-To deal with variable building topologies (e.g., varying number of tiles), the deep model is forced to learn how to map buildings of arbitrary shape—as seen in the center of the following figure—into a convex representation, as seen on the right:
+To deal with variable building topologies (e.g., varying number of tiles), the deep model is forced to learn how to map buildings of arbitrary shape, as seen in the center of the following figure, into a convex representation, as seen on the right:
 ![OVENFigure](images/building_topology.png)
 
 # Dataset
