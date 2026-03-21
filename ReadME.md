@@ -13,8 +13,32 @@ To deal with variable building topologies (e.g., varying number of tiles), the d
 
 # Dataset
 
-The curated dataset can be found in /dataset with images and labels split between training and validation data. 
-Citation
+The curated dataset can be found in /datasets with images and labels split between training and validation data. 
+
+# How to use
+
+We supply the smallest version of the trained model for Lisbon. Pending request, a larger version can be supplied. To start we assume that you have 
+
+1. A python interpreter > 3.12
+2. pip installed in your system
+
+Open a terminal in the folder of OVEN
+
+'''bash
+>> python -m venv depend
+>> source depend/bin/activate
+>> (depend) pip install -r requirements.txt
+'''
+
+If you need to train the model locally, we have a prototypical function that either trains the model or that runs the genetic algorithm to select the optimum hyperparameters to train the model. You can do this through 
+
+'''bash
+>> (depend) python3 test_training.py
+'''
+
+Now suppose that you don't want to train the model but want to use it in your application. Note that the algorithm was trained with data from Lisbon, so there is a chance that the predictive power of the model degrades. We make no strong claims about these differences in performance.
+
+ 
 
 # Citation
 
