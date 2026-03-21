@@ -36,10 +36,10 @@ If you need to train the model locally, we have a prototypical function that eit
 >> (depend) python3 test_training.py
 ```
 
-Now suppose that you don't want to train the model but want to use it in your application. Note that the algorithm was trained with data from Lisbon, so there is a chance that the predictive power of the model degrades. We make no strong claims about these differences in performance.
+Now suppose that you don't want to train the model but want to use it in your application. Note that the algorithm was trained with data from Lisbon, so there is a chance that the predictive power of the model degrades. We make no strong claims about these differences in performance. A small snipit of how the model can be used is shown in the following gif
 
+![Demo for users](images/demo.gif)
  
-
 # Citation
 
 This code accompanies the journal submission of OVEN. If you find this project helpful and useful, please cite our work! It's appreciated!
