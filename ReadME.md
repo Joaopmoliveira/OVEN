@@ -39,6 +39,8 @@ If you need to train the model locally, we have a prototypical function that eit
 Now suppose that you don't want to train the model but want to use it in your application. Note that the algorithm was trained with data from Lisbon, so there is a chance that the predictive power of the model degrades. We make no strong claims about these differences in performance. A small snipit of how the model can be used is shown in the following gif
 
 ![Demo for users](images/demo.gif)
+
+<img src="images/demo.gif" width="600">
  
 # Citation
 
