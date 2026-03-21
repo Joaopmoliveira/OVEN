@@ -381,6 +381,7 @@ class v8RoofLoss(v8DetectionLoss):
             gt_bboxes,
             mask_gt,
             gt_rooftops,
+            self.hyp.classificationweight
         )
 
         '''_, target_bboxes, target_scores, fg_mask, target_gt_idx = self.assigner(

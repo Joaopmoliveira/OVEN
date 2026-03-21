@@ -391,6 +391,14 @@ class Instances:
         if self.keypoints is not None:
             self.keypoints[..., 1] = h - self.keypoints[..., 1]
         if self.extras is not None:
+            #a_h = self.extras[:,0:1]
+            a_t = self.extras[:,1:2]
+            #a_r = self.extras[:,2:3]
+            a_b = self.extras[:,3:4]
+            #a_l = self.extras[:,4:5]
+            #top
+            self.extras[:,3:4] = a_t
+            self.extras[:,1:2] = a_b
             t = self.extras[:,9:10]
             r = self.extras[:,10:11]
             b = self.extras[:,11:12]
@@ -418,6 +426,14 @@ class Instances:
         if self.keypoints is not None:
             self.keypoints[..., 0] = w - self.keypoints[..., 0]
         if self.extras is not None: #we must switch the left 
+            #a_h = self.extras[:,0:1]
+            #a_t = self.extras[:,1:2]
+            a_r = self.extras[:,2:3]
+            #a_b = self.extras[:,3:4]
+            a_l = self.extras[:,4:5]
+            #left 
+            self.extras[:,4:5] = a_r
+            self.extras[:,2:3] = a_l
             t = self.extras[:,9:10]
             r = self.extras[:,10:11]
             b = self.extras[:,11:12]

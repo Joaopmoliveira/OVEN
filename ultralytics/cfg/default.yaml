@@ -101,10 +101,11 @@ warmup_bias_lr: 0.1 # (float) bias learning rate during warmup
 box: 7.5 # (float) box loss gain
 cls: 0.5 # (float) classification loss gain
 dfl: 1.5 # (float) distribution focal loss gain
-roofcls: 13.91806 # (float) rooftop miss classification loss
+roofcls: 10.91806 # (float) rooftop miss classification loss
 roofinclination: 0.93704 # (float) rooftop inclination loss gain
-rooforientation: 4.80684 # (float) rooftop orientation loss gain
+rooforientation: 1.80684 # (float) rooftop orientation loss gain
 roofarea: 0.74774 # (float) rooftop area loss gain
+classificationweight: 0.5
 pose: 12.0 # (float) pose loss gain (pose tasks)
 kobj: 1.0 # (float) keypoint objectness loss gain (pose tasks)
 nbs: 64 # (int) nominal batch size used for loss normalization

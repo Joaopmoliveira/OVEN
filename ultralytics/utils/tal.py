@@ -331,7 +331,7 @@ class TaskAlignedAssigner(nn.Module):
 class RoofTaskAlignedAssigner(TaskAlignedAssigner):
 
     @torch.no_grad()
-    def forward(self, pd_scores, pd_bboxes, pd_rooftop, anc_points, gt_labels, gt_bboxes, mask_gt, gt_rooftop):
+    def forward(self, pd_scores, pd_bboxes, pd_rooftop, anc_points, gt_labels, gt_bboxes, mask_gt, gt_rooftop,weight):
         """
         Compute the roof-aligned assignment.
 
@@ -369,15 +369,15 @@ class RoofTaskAlignedAssigner(TaskAlignedAssigner):
             )
 
         try:
-            return self._forward(pd_scores, pd_bboxes, pd_rooftop, anc_points, gt_labels, gt_bboxes, mask_gt,gt_rooftop)
+            return self._forward(pd_scores, pd_bboxes, pd_rooftop, anc_points, gt_labels, gt_bboxes, mask_gt,gt_rooftop,weight)
         except torch.cuda.OutOfMemoryError:
             # Move tensors to CPU, compute, then move back to original device
             LOGGER.warning("CUDA OutOfMemoryError in TaskAlignedAssigner, using CPU")
-            cpu_tensors = [t.cpu() for t in (pd_scores, pd_bboxes, anc_points, gt_labels, gt_bboxes, mask_gt,gt_rooftop)]
+            cpu_tensors = [t.cpu() for t in (pd_scores, pd_bboxes, anc_points, gt_labels, gt_bboxes, mask_gt,gt_rooftop,weight)]
             result = self._forward(*cpu_tensors)
             return tuple(t.to(device) for t in result)
         
-    def _forward(self, pd_scores, pd_bboxes, pd_rooftop, anc_points, gt_labels, gt_bboxes, mask_gt, gt_rooftop):
+    def _forward(self, pd_scores, pd_bboxes, pd_rooftop, anc_points, gt_labels, gt_bboxes, mask_gt, gt_rooftop,weight):
         """
         Compute the task-aligned assignment.
 
@@ -399,7 +399,7 @@ class RoofTaskAlignedAssigner(TaskAlignedAssigner):
             gt_rooftop (torch.Tensor): 
         """
         mask_pos, align_metric, overlaps = self.get_pos_mask(
-            pd_scores, pd_bboxes, pd_rooftop, gt_labels, gt_bboxes, anc_points, mask_gt,gt_rooftop
+            pd_scores, pd_bboxes, pd_rooftop, gt_labels, gt_bboxes, anc_points, mask_gt,gt_rooftop,weight
         )
 
         target_gt_idx, fg_mask, mask_pos = self.select_highest_overlaps(mask_pos, overlaps, self.n_max_boxes)
@@ -416,7 +416,7 @@ class RoofTaskAlignedAssigner(TaskAlignedAssigner):
 
         return target_labels, target_bboxes, target_scores, target_rooftop, fg_mask.bool(), target_gt_idx
     
-    def get_pos_mask(self, pd_scores, pd_bboxes, pd_rooftop, gt_labels, gt_bboxes, anc_points, mask_gt, gt_rooftop):
+    def get_pos_mask(self, pd_scores, pd_bboxes, pd_rooftop, gt_labels, gt_bboxes, anc_points, mask_gt, gt_rooftop,weight):
         """
         Get positive mask for each ground truth box.
 
@@ -435,7 +435,7 @@ class RoofTaskAlignedAssigner(TaskAlignedAssigner):
         """
         mask_in_gts = self.select_candidates_in_gts(anc_points, gt_bboxes)
         # Get anchor_align metric, (b, max_num_obj, h*w)
-        align_metric, overlaps = self.get_box_metrics(pd_scores, pd_bboxes, pd_rooftop, gt_labels, gt_bboxes, mask_in_gts * mask_gt,gt_rooftop)
+        align_metric, overlaps = self.get_box_metrics(pd_scores, pd_bboxes, pd_rooftop, gt_labels, gt_bboxes, mask_in_gts * mask_gt,gt_rooftop,weight)
         # Get topk_metric mask, (b, max_num_obj, h*w)
         mask_topk = self.select_topk_candidates(align_metric, topk_mask=mask_gt.expand(-1, -1, self.topk).bool())
         # Merge all mask to a final mask, (b, max_num_obj, h*w)
@@ -443,7 +443,7 @@ class RoofTaskAlignedAssigner(TaskAlignedAssigner):
 
         return mask_pos, align_metric, overlaps
     
-    def get_box_metrics(self, pd_scores, pd_bboxes, pd_rooftop, gt_labels, gt_bboxes, mask_gt, gt_rooftop):
+    def get_box_metrics(self, pd_scores, pd_bboxes, pd_rooftop, gt_labels, gt_bboxes, mask_gt, gt_rooftop,weight):
         """
         Compute alignment metric given predicted and ground truth bounding boxes.
 
